@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Layout from "@/components/layout/Layout";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface IdeaResult {
   title: string;
@@ -90,7 +91,7 @@ const IdeaLab = () => {
     setResults([]);
   };
 
-  const handleEmailCapture = () => {
+  const handleEmailCapture = async () => {
     if (!email.trim() || !email.includes("@")) {
       toast({
         title: "Please enter a valid email",
@@ -99,10 +100,27 @@ const IdeaLab = () => {
       return;
     }
 
-    toast({
-      title: "Results sent!",
-      description: "Check your inbox for a detailed report of your ideas.",
-    });
+    try {
+      const { error } = await supabase.from("leads").insert({
+        email: email,
+        message: `Idea Lab results: ${results.map(r => r.title).join(", ")}`,
+        source: "idea_lab"
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Results sent!",
+        description: "Check your inbox for a detailed report of your ideas.",
+      });
+      setEmail("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

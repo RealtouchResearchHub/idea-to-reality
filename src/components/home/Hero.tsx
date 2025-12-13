@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Lightbulb, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroTech from "@/assets/hero-tech.png";
 
 const Hero = () => {
   return (
@@ -23,7 +24,8 @@ const Hero = () => {
       />
 
       <div className="container-custom section-padding relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-center lg:text-left">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -85,7 +87,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-16 flex flex-wrap items-center justify-center gap-8 text-muted-foreground"
+            className="mt-16 flex flex-wrap items-center justify-center lg:justify-start gap-8 text-muted-foreground"
           >
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-accent" />
@@ -98,6 +100,24 @@ const Hero = () => {
             <div className="flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-accent" />
               <span className="text-sm">Startup-Focused</span>
+            </div>
+          </motion.div>
+          </div>
+          
+          {/* Hero Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative hidden lg:block"
+          >
+            <div className="relative">
+              <div className="absolute -inset-4 bg-accent/20 rounded-3xl blur-2xl" />
+              <img 
+                src={heroTech} 
+                alt="AI Business Consulting - Digital Innovation"
+                className="relative rounded-2xl shadow-2xl w-full max-w-lg mx-auto"
+              />
             </div>
           </motion.div>
         </div>

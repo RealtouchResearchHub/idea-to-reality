@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.jpg";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -26,12 +27,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <span className="font-heading font-bold text-accent-foreground">R</span>
-            </div>
-            <span className="font-heading font-semibold text-lg hidden sm:block">
-              Realtouch
-            </span>
+            <img 
+              src={logo} 
+              alt="Realtouch Research & Consulting" 
+              className="h-10 sm:h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop navigation */}
