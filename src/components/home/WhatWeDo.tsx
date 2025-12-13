@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, Briefcase, Cpu, ArrowRight } from "lucide-react";
+import { Search, Briefcase, Cpu, ArrowRight, FileText, PresentationIcon, TrendingUp, Rocket, PenTool, Bot, Target, BarChart3, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -24,6 +24,54 @@ const pillars = [
     description: "Custom AI solutions, intelligent automation, and digital transformation. Helping startups scale faster with the right technology.",
     features: ["Custom AI Tools", "Process Automation", "Digital Solutions", "Scalable SaaS Development"],
     color: "teal",
+  },
+];
+
+const azServices = [
+  {
+    icon: FileText,
+    title: "Business Model",
+    description: "Strategic framework that defines how your startup creates, delivers, and captures value.",
+  },
+  {
+    icon: Briefcase,
+    title: "Business Plan",
+    description: "Comprehensive roadmap covering market analysis, operations, and growth strategy.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Revenue Projection",
+    description: "Data-driven revenue forecasts with multiple scenarios for investor confidence.",
+  },
+  {
+    icon: PresentationIcon,
+    title: "Pitch Deck",
+    description: "Compelling investor presentations that tell your story and secure funding.",
+  },
+  {
+    icon: BarChart3,
+    title: "Financial Projections",
+    description: "Detailed 3-5 year financial models including P&L, cash flow, and balance sheets.",
+  },
+  {
+    icon: Globe,
+    title: "Landing Page",
+    description: "High-converting websites designed to capture leads and drive customer action.",
+  },
+  {
+    icon: Target,
+    title: "Action Plans",
+    description: "Step-by-step execution roadmaps with milestones, KPIs, and accountability.",
+  },
+  {
+    icon: PenTool,
+    title: "Content Creation",
+    description: "Engaging brand content, marketing copy, and social media assets that convert.",
+  },
+  {
+    icon: Bot,
+    title: "Custom AI System Prompts & Tools",
+    description: "Bespoke AI assistants and automation tools tailored to your business needs.",
   },
 ];
 
@@ -52,7 +100,7 @@ const WhatWeDo = () => {
         </motion.div>
 
         {/* Pillars grid */}
-        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 mb-20">
           {pillars.map((pillar, index) => (
             <motion.div
               key={pillar.title}
@@ -106,6 +154,69 @@ const WhatWeDo = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* A-Z Services Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <span className="text-cta text-sm font-medium uppercase tracking-wider">A–Z Startup Solutions</span>
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mt-4 mb-4">
+            Everything Your Startup Needs to <span className="text-gradient-cta">Launch & Scale</span>
+          </h3>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            World-class deliverables crafted by experts. From business strategy to AI-powered tools — we've got you covered.
+          </p>
+        </motion.div>
+
+        {/* A-Z Services Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+          {azServices.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              className="group"
+            >
+              <div className="glass-card p-6 h-full hover:border-cta/30 hover:bg-cta/5 transition-all duration-300 cursor-pointer">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-cta/10 flex items-center justify-center shrink-0 group-hover:bg-cta/20 transition-colors">
+                    <service.icon className="w-6 h-6 text-cta" />
+                  </div>
+                  <div>
+                    <h4 className="font-heading font-semibold mb-1 group-hover:text-cta transition-colors">
+                      {service.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <Button variant="cta" size="lg" asChild>
+            <Link to="/services">
+              View All Services
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </Button>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { Search, Briefcase, Cpu, BarChart3, Target, Lightbulb, Rocket, Check, ArrowRight } from "lucide-react";
+import { 
+  Search, Briefcase, Cpu, BarChart3, Target, Lightbulb, Rocket, Check, ArrowRight,
+  FileText, PresentationIcon, TrendingUp, PenTool, Bot, Globe, Sparkles
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
@@ -44,6 +47,72 @@ const services = [
   },
 ];
 
+const azDeliverables = [
+  {
+    icon: FileText,
+    title: "Business Model",
+    description: "Strategic framework defining how your startup creates, delivers, and captures value. Includes value proposition canvas, customer segments, revenue streams, and key partnerships.",
+    features: ["Value Proposition Design", "Customer Segment Analysis", "Revenue Stream Mapping", "Key Partnership Strategy"],
+    price: "From $1,500",
+  },
+  {
+    icon: Briefcase,
+    title: "Business Plan",
+    description: "Comprehensive 30-50 page document covering executive summary, market analysis, operations, management team, and financial projections for banks and investors.",
+    features: ["Executive Summary", "Market & Competitive Analysis", "Operations Strategy", "Management Overview"],
+    price: "From $2,500",
+  },
+  {
+    icon: TrendingUp,
+    title: "Revenue Projection",
+    description: "Data-driven 3-5 year revenue forecasts with multiple scenarios (conservative, moderate, aggressive) to give investors and stakeholders confidence in your growth potential.",
+    features: ["Multi-Scenario Modeling", "Growth Assumptions", "Market Sizing", "Unit Economics"],
+    price: "From $1,200",
+  },
+  {
+    icon: PresentationIcon,
+    title: "Pitch Deck",
+    description: "Compelling 12-15 slide investor presentation designed to tell your story, highlight traction, and secure funding. Includes narrative coaching.",
+    features: ["Problem-Solution Story", "Market Opportunity", "Traction & Metrics", "The Ask"],
+    price: "From $2,000",
+  },
+  {
+    icon: BarChart3,
+    title: "Financial Projections",
+    description: "Detailed 3-5 year financial models including income statement, cash flow, balance sheet, break-even analysis, and funding requirements.",
+    features: ["Income Statement", "Cash Flow Forecast", "Balance Sheet", "Break-Even Analysis"],
+    price: "From $1,800",
+  },
+  {
+    icon: Globe,
+    title: "Landing Page",
+    description: "High-converting, mobile-responsive landing page designed to capture leads, validate your idea, and drive customer action. Includes copywriting and SEO.",
+    features: ["Conversion-Optimized Design", "Professional Copywriting", "SEO Foundation", "Lead Capture Forms"],
+    price: "From $1,500",
+  },
+  {
+    icon: Target,
+    title: "Action Plans",
+    description: "90-day execution roadmap with weekly milestones, KPIs, accountability checkpoints, and resource allocation to ensure you stay on track.",
+    features: ["Weekly Milestones", "KPI Dashboard", "Resource Planning", "Accountability Framework"],
+    price: "From $800",
+  },
+  {
+    icon: PenTool,
+    title: "Content Creation",
+    description: "Brand-aligned content including website copy, social media assets, email sequences, and marketing materials that resonate with your audience.",
+    features: ["Website Copywriting", "Social Media Content", "Email Sequences", "Marketing Collateral"],
+    price: "From $1,200",
+  },
+  {
+    icon: Bot,
+    title: "Custom AI System Prompts & Tools",
+    description: "Bespoke AI assistants, chatbots, and automation tools tailored to your specific business workflows. Increase efficiency and delight customers.",
+    features: ["Custom Chatbots", "Workflow Automation", "AI Assistants", "Integration Setup"],
+    price: "From $3,000",
+  },
+];
+
 const Services = () => {
   return (
     <>
@@ -51,7 +120,7 @@ const Services = () => {
         <title>Our Services | Realtouch Research & Consulting</title>
         <meta
           name="description"
-          content="Explore our comprehensive services: AI Research & Consulting, End-to-End Business Solutions, and Custom AI Products & Automation."
+          content="Explore our comprehensive services: AI Research & Consulting, End-to-End Business Solutions, and Custom AI Products & Automation. World-class business model, pitch deck, financial projections, and more."
         />
       </Helmet>
 
@@ -180,7 +249,7 @@ const Services = () => {
                         <Rocket className="w-5 h-5 text-accent" />
                         <h4 className="font-heading font-semibold">Our Process</h4>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         {service.process.map((step, i) => (
                           <div key={step} className="flex items-center">
                             <div className="px-3 py-1.5 rounded-full bg-secondary text-xs font-medium">
@@ -200,8 +269,111 @@ const Services = () => {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* A-Z Deliverables Section */}
         <section className="section-padding bg-secondary/30">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <div className="inline-flex items-center gap-2 bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <Sparkles className="w-4 h-4" />
+                A–Z Startup Deliverables
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-6">
+                World-Class <span className="text-gradient-cta">Deliverables</span>
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+                Everything your startup needs — from strategic planning to market-ready assets. 
+                Each deliverable is crafted by experts to accelerate your path to funding and growth.
+              </p>
+            </motion.div>
+
+            {/* Deliverables Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {azDeliverables.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className="group"
+                >
+                  <div className="glass-card p-6 h-full flex flex-col hover:border-cta/40 transition-all duration-300">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-cta/10 flex items-center justify-center group-hover:bg-cta/20 transition-colors">
+                        <item.icon className="w-6 h-6 text-cta" />
+                      </div>
+                      <span className="text-sm font-semibold text-cta bg-cta/10 px-3 py-1 rounded-full">
+                        {item.price}
+                      </span>
+                    </div>
+                    
+                    {/* Content */}
+                    <h3 className="text-xl font-heading font-semibold mb-2 group-hover:text-cta transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-grow">
+                      {item.description}
+                    </p>
+                    
+                    {/* Features */}
+                    <div className="space-y-2 pt-4 border-t border-border">
+                      {item.features.map((feature) => (
+                        <div key={feature} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Check className="w-3.5 h-3.5 text-success shrink-0" />
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Bundle CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="glass-card p-8 md:p-12 text-center border-cta/30"
+            >
+              <div className="inline-flex items-center gap-2 bg-success/10 text-success px-4 py-2 rounded-full text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                Best Value
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-heading font-bold mb-4">
+                Complete Startup Launch Package
+              </h3>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+                Get all 9 deliverables bundled together at a significant discount. Everything you need to 
+                launch, pitch investors, and scale your startup — delivered in 4-6 weeks.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="text-center">
+                  <span className="text-sm text-muted-foreground line-through">Individual value: $15,500+</span>
+                  <div className="text-3xl font-heading font-bold text-cta">$9,999</div>
+                  <span className="text-sm text-success">Save over 35%</span>
+                </div>
+                <Button variant="cta" size="lg" asChild className="sm:ml-8">
+                  <Link to="/contact">
+                    Get the Full Package
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="section-padding">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
