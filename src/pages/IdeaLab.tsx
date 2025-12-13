@@ -77,11 +77,28 @@ const IdeaLab = () => {
 
     setStep("processing");
 
-    // Simulate AI processing
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-ideas", {
+        body: { interests, problem },
+      });
 
-    setResults(sampleResults);
-    setStep("results");
+      if (error) throw error;
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setResults(data.ideas);
+      setStep("results");
+    } catch (error: any) {
+      console.error("Error generating ideas:", error);
+      toast({
+        title: "Error generating ideas",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+      setStep("input");
+    }
   };
 
   const handleReset = () => {

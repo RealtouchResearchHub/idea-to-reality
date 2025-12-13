@@ -6,23 +6,23 @@ import { Link } from "react-router-dom";
 const pillars = [
   {
     icon: Search,
-    title: "AI Research & Strategic Consulting",
-    description: "Deep-dive analysis, market research, and strategic roadmaps powered by AI insights. We help you understand your market and position for success.",
-    features: ["Market Analysis", "Competitive Intelligence", "Strategic Planning", "AI Readiness Assessment"],
+    title: "AI Research & Market Intelligence",
+    description: "Deep-dive market research, competitive analysis, and strategic insights powered by AI. We help startups scale with data-driven decisions.",
+    features: ["Market Research", "Competitive Intelligence", "Startup Scaling Strategy", "AI Readiness Assessment"],
     color: "accent",
   },
   {
     icon: Briefcase,
-    title: "Business Solutions (A–Z)",
-    description: "Complete end-to-end business support from ideation to execution. We handle everything so you can focus on your vision.",
-    features: ["Business Planning", "Product Development", "Launch Strategy", "Operations Setup"],
+    title: "One-Stop Business Consulting",
+    description: "Complete end-to-end business support from ideation to execution. Your single destination for all business consulting needs.",
+    features: ["Business Planning", "Startup Advisory", "Launch Strategy", "Operations Setup"],
     color: "cta",
   },
   {
     icon: Cpu,
     title: "AI Products & Automation",
-    description: "Custom AI solutions, intelligent automation, and digital transformation. We build the technology that powers your growth.",
-    features: ["Custom AI Tools", "Process Automation", "Digital Solutions", "SaaS Development"],
+    description: "Custom AI solutions, intelligent automation, and digital transformation. Helping startups scale faster with the right technology.",
+    features: ["Custom AI Tools", "Process Automation", "Digital Solutions", "Scalable SaaS Development"],
     color: "teal",
   },
 ];
