@@ -11,6 +11,7 @@ import IdeaLab from "./pages/IdeaLab";
 import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import GrantIntelligence from "./pages/GrantIntelligence";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/grants" element={<GrantIntelligence />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

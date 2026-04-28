@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/gallery", label: "AI Solutions" },
   { href: "/idea-lab", label: "Idea Lab" },
+  { href: "/grants", label: "Grant Intel" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
