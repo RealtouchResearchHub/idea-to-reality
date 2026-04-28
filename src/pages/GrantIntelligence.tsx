@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Sparkles, LayoutDashboard, Search, GitBranch, FileEdit } from "lucide-react";
-import Layout from "@/components/layout/Layout";
+import HarvestTouchLayout from "@/components/grants/HarvestTouchLayout";
 import GrantDashboard from "@/components/grants/GrantDashboard";
 import GrantDiscovery from "@/components/grants/GrantDiscovery";
 import GrantTracker, { TrackedGrant, PipelineStage } from "@/components/grants/GrantTracker";
@@ -63,20 +63,24 @@ export default function GrantIntelligence() {
   return (
     <>
       <Helmet>
-        <title>Grant Intelligence System | Harvest Touch CIC</title>
+        <title>Grant Intelligence | Harvest Touch CIC — Rochdale</title>
         <meta
           name="description"
-          content="AI-powered grant discovery, eligibility scoring, pipeline tracking and application drafting for Harvest Touch CIC."
+          content="Harvest Touch CIC grant finder — AI-powered discovery, eligibility scoring, pipeline tracking and instant application drafts for community funding."
         />
+        <meta name="keywords" content="Harvest Touch CIC, Rochdale grants, community funding, youth wellbeing grants, CIC grants UK" />
+        <meta property="og:title" content="Grant Intelligence | Harvest Touch CIC" />
+        <meta property="og:description" content="Find and apply for the right grants faster. AI-scored against Harvest Touch's CIC profile." />
+        <meta property="og:type" content="website" />
       </Helmet>
 
-      <Layout>
+      <HarvestTouchLayout>
         {/* Hero */}
         <section className="section-padding relative overflow-hidden pb-0">
           <div className="absolute inset-0 bg-hero-glow" />
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-cta/5 rounded-full blur-3xl animate-pulse-glow" />
-            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-pulse-glow animation-delay-400" />
+            <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-green-500/5 rounded-full blur-3xl animate-pulse-glow" />
+            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl animate-pulse-glow animation-delay-400" />
           </div>
 
           <div className="container-custom relative z-10">
@@ -86,17 +90,19 @@ export default function GrantIntelligence() {
               transition={{ duration: 0.5 }}
               className="max-w-3xl mb-10"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cta/10 text-cta text-sm font-medium mb-5">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium mb-5">
                 <Sparkles className="w-4 h-4" />
-                Grant Intelligence System — Harvest Touch CIC
+                Harvest Touch CIC · AI Grant Intelligence
               </div>
               <h1 className="text-4xl sm:text-5xl font-heading font-bold mb-4">
-                Find, Match & Apply for{" "}
-                <span className="text-gradient-cta">Grants Faster</span>
+                Find, Match & Win{" "}
+                <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                  Funding for Rochdale
+                </span>
               </h1>
               <p className="text-muted-foreground text-lg max-w-xl">
-                AI-powered grant discovery scored against your CIC profile. Manage your pipeline
-                and generate application drafts in minutes, not days.
+                Every grant scored against Harvest Touch's CIC profile — youth wellbeing,
+                digital skills, Rochdale-based. Manage your pipeline and draft applications in minutes.
               </p>
             </motion.div>
 
@@ -156,7 +162,7 @@ export default function GrantIntelligence() {
             )}
           </div>
         </section>
-      </Layout>
+      </HarvestTouchLayout>
     </>
   );
 }

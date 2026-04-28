@@ -24,7 +24,10 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            {/* On the grants subdomain the root loads the grant system directly */}
+            <Route path="/" element={
+              window.location.hostname.startsWith("grants.") ? <GrantIntelligence /> : <Index />
+            } />
             <Route path="/services" element={<Services />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/idea-lab" element={<IdeaLab />} />
