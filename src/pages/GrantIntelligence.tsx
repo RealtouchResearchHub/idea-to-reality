@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Sparkles, LayoutDashboard, Search, GitBranch, FileEdit } from "lucide-react";
@@ -10,6 +10,7 @@ import ApplicationDraftGenerator from "@/components/grants/ApplicationDraftGener
 import { GRANTS } from "@/lib/grantData";
 import { scoreAllGrants, ScoredGrant } from "@/lib/eligibilityEngine";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const scoredGrants = scoreAllGrants(GRANTS);
 
@@ -22,37 +23,119 @@ const TABS = [
 
 type TabId = typeof TABS[number]["id"];
 
+function getSessionId(): string {
+  try {
+    let id = localStorage.getItem("ht_grant_session");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("ht_grant_session", id);
+    }
+    return id;
+  } catch {
+    return "anon";
+  }
+}
+
 export default function GrantIntelligence() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [tracked, setTracked] = useState<TrackedGrant[]>([]);
   const [draftGrant, setDraftGrant] = useState<ScoredGrant | null>(null);
+  const [loading, setLoading] = useState(true);
+  const sessionId = useRef(getSessionId());
+
+  useEffect(() => {
+    async function loadPipeline() {
+      try {
+        const { data, error } = await (supabase as any)
+          .from("grant_pipeline")
+          .select("*")
+          .eq("session_id", sessionId.current)
+          .order("created_at", { ascending: true });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const restored: TrackedGrant[] = data
+            .map((row: any) => {
+              const grant = scoredGrants.find((g) => g.id === row.grant_id);
+              if (!grant) return null;
+              return {
+                grant,
+                stage: row.stage as PipelineStage,
+                addedAt: new Date(row.created_at),
+              };
+            })
+            .filter(Boolean) as TrackedGrant[];
+          setTracked(restored);
+        }
+      } catch {
+        // silently fall back to empty pipeline
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPipeline();
+  }, []);
 
   const trackedIds = new Set(tracked.map((t) => t.grant.id));
 
-  const handleTrack = useCallback((grant: ScoredGrant) => {
+  const handleTrack = useCallback(async (grant: ScoredGrant) => {
     if (trackedIds.has(grant.id)) {
       toast({ title: `${grant.name} is already in your pipeline` });
       return;
     }
-    setTracked((prev) => [
-      ...prev,
-      { grant, stage: "shortlisted", addedAt: new Date() },
-    ]);
+
+    setTracked((prev) => [...prev, { grant, stage: "shortlisted", addedAt: new Date() }]);
+
+    try {
+      await (supabase as any).from("grant_pipeline").insert({
+        session_id: sessionId.current,
+        grant_id: grant.id,
+        grant_name: grant.name,
+        funder: grant.funder,
+        stage: "shortlisted",
+        amount_min: grant.amount.min,
+        amount_max: grant.amount.max,
+        deadline: grant.deadline,
+        match_score: grant.score,
+      });
+    } catch {
+      // best-effort
+    }
+
     toast({
       title: "Added to pipeline",
       description: `${grant.name} added to your shortlist.`,
     });
   }, [trackedIds, toast]);
 
-  const handleRemove = useCallback((id: string) => {
+  const handleRemove = useCallback(async (id: string) => {
     setTracked((prev) => prev.filter((t) => t.grant.id !== id));
+    try {
+      await (supabase as any)
+        .from("grant_pipeline")
+        .delete()
+        .eq("session_id", sessionId.current)
+        .eq("grant_id", id);
+    } catch {
+      // best-effort
+    }
   }, []);
 
-  const handleStageChange = useCallback((id: string, stage: PipelineStage) => {
+  const handleStageChange = useCallback(async (id: string, stage: PipelineStage) => {
     setTracked((prev) =>
       prev.map((t) => (t.grant.id === id ? { ...t, stage } : t))
     );
+    try {
+      await (supabase as any)
+        .from("grant_pipeline")
+        .update({ stage })
+        .eq("session_id", sessionId.current)
+        .eq("grant_id", id);
+    } catch {
+      // best-effort
+    }
   }, []);
 
   const handleDraft = useCallback((grant: ScoredGrant) => {
@@ -75,7 +158,6 @@ export default function GrantIntelligence() {
       </Helmet>
 
       <HarvestTouchLayout>
-        {/* Hero */}
         <section className="section-padding relative overflow-hidden pb-0">
           <div className="absolute inset-0 bg-hero-glow" />
           <div className="absolute inset-0 pointer-events-none">
@@ -106,7 +188,6 @@ export default function GrantIntelligence() {
               </p>
             </motion.div>
 
-            {/* Tab navigation */}
             <div className="flex gap-1 sm:gap-2 border-b border-border overflow-x-auto pb-px scrollbar-hide">
               {TABS.map((tab) => {
                 const Icon = tab.icon;
@@ -117,7 +198,7 @@ export default function GrantIntelligence() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-3 sm:px-5 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                       isActive
-                        ? "border-cta text-cta"
+                        ? "border-green-400 text-green-400"
                         : "border-transparent text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -125,7 +206,7 @@ export default function GrantIntelligence() {
                     <span className="hidden sm:inline">{tab.label}</span>
                     <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
                     {tab.id === "pipeline" && tracked.length > 0 && (
-                      <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-cta text-cta-foreground">
+                      <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-green-500 text-white">
                         {tracked.length}
                       </span>
                     )}
@@ -136,29 +217,38 @@ export default function GrantIntelligence() {
           </div>
         </section>
 
-        {/* Tab content */}
         <section className="section-padding pt-8">
           <div className="container-custom">
-            {activeTab === "dashboard" && (
-              <GrantDashboard grants={scoredGrants} trackedCount={tracked.length} />
-            )}
-            {activeTab === "discover" && (
-              <GrantDiscovery
-                grants={scoredGrants}
-                trackedIds={trackedIds}
-                onTrack={handleTrack}
-              />
-            )}
-            {activeTab === "pipeline" && (
-              <GrantTracker
-                tracked={tracked}
-                onRemove={handleRemove}
-                onStageChange={handleStageChange}
-                onDraft={handleDraft}
-              />
-            )}
-            {activeTab === "draft" && (
-              <ApplicationDraftGenerator preselectedGrant={draftGrant} />
+            {loading ? (
+              <div className="flex items-center justify-center py-24 gap-3 text-muted-foreground">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-bounce" />
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-bounce [animation-delay:0.15s]" />
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-bounce [animation-delay:0.3s]" />
+              </div>
+            ) : (
+              <>
+                {activeTab === "dashboard" && (
+                  <GrantDashboard grants={scoredGrants} trackedCount={tracked.length} />
+                )}
+                {activeTab === "discover" && (
+                  <GrantDiscovery
+                    grants={scoredGrants}
+                    trackedIds={trackedIds}
+                    onTrack={handleTrack}
+                  />
+                )}
+                {activeTab === "pipeline" && (
+                  <GrantTracker
+                    tracked={tracked}
+                    onRemove={handleRemove}
+                    onStageChange={handleStageChange}
+                    onDraft={handleDraft}
+                  />
+                )}
+                {activeTab === "draft" && (
+                  <ApplicationDraftGenerator preselectedGrant={draftGrant} />
+                )}
+              </>
             )}
           </div>
         </section>
